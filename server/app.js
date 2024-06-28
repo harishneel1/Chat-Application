@@ -1,19 +1,22 @@
-const ws = require("ws");
+const { Server } = require("socket.io");
 const http = require("http");
 
 const httpServer = http.createServer();
 
 httpServer.listen(3001);
 
-const wsServer = new ws.WebSocketServer({
-    server: httpServer
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*"
+    }
 })
 
-wsServer.on("connection", (socket) => {
-    console.log("Connection established");
+io.on("connection", (socket) => {
+
+    console.log(`User ${socket.id} connected`);
+
     socket.on("message", (data) => {
-        const b = Buffer.from(data).toString();
-        console.log(b, "data");
-        socket.send(`${data}`)
+        console.log(data);
+        io.emit("message", `${socket.id.substring(0, 5)}: ${data}`)
     })
 })

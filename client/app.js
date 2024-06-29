@@ -2,10 +2,11 @@ const socket = io("ws://localhost:3001");
 
 
 const form = document.querySelector("form");
+const input = document.querySelector("input");
+const p = document.querySelector("p")
 
 function sendMessage(e) {
     e.preventDefault();
-    const input = document.querySelector("input");
     if (input.value) {
         socket.emit("message", input.value);
         input.value = ""
@@ -19,4 +20,22 @@ socket.on("message", (data) => {
     const li = document.createElement("li");
     li.textContent = data;
     ul.appendChild(li);
+    p.textContent = ""
+})
+
+input.addEventListener("keypress", () => {
+    //activity event
+    socket.emit("activity", socket.id.substring(0, 5));
+})
+
+let activityTimer;
+
+socket.on("activity", (name) => {
+    p.textContent = `${name} is typing...`
+
+    // Clear after 3 seconds
+    clearTimeout(activityTimer);
+    activityTimer = setTimeout(() => {
+        p.textContent = ""
+    }, 3000);
 })

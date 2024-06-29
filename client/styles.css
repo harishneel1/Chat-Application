@@ -29,6 +29,14 @@ form {
     padding: 0 20px;
 }
 
+p {
+    margin: 0 20px 20px 20px;
+    padding: 0;
+    color: #dcddde;
+    font-size: 14px;
+    text-align: center;
+    font-style: italic;
+}
 
 button {
     padding: 10px 20px;
